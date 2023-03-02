@@ -7,7 +7,14 @@
     "dev": "next dev",
     "postinstall": "prisma generate",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@headlessui/react": "^1.7.12",
@@ -38,6 +45,8 @@
     "autoprefixer": "^10.4.7",
     "eslint": "^8.34.0",
     "eslint-config-next": "^13.2.1",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.1.2",
     "postcss": "^8.4.14",
     "prettier": "^2.8.1",
     "prettier-plugin-tailwindcss": "^0.2.1",
