@@ -1,1 +1,5 @@
-export type LanguageLabel = "kr" | "en" | "jp" | "vn";
+export type LanguageLabel = "ko" | "en" | "ja" | "vi";
+
+export type Translations = {
+  [key in LanguageLabel]?: string;
+};

@@ -3,8 +3,8 @@ import Head from "next/head";
 // import { signIn, signOut, useSession } from "next-auth/react";
 
 // import { api } from "@/utils/api";
-import ContactForm from "@/components/ContactForm";
-import ResultInputs from "@/components/ResultInputs";
+import TranslationForm2 from "@/components/TranslationForm2";
+import TranslationForm from "@/components/TranslationForm";
 
 const Home: NextPage = () => {
   // const hello = api.example.hello.useQuery({ text: "from tRPC" });
@@ -19,8 +19,8 @@ const Home: NextPage = () => {
         />
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <ContactForm />
-      <ResultInputs />
+      <TranslationForm />
+      {/* <TranslationForm2 /> */}
     </>
   );
 };

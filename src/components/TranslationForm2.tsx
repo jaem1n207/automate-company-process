@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
+import { type LanguageLabel } from "@/models/language";
+import { useMutation } from "@tanstack/react-query";
 
 interface Country {
   name: string;
@@ -13,6 +15,25 @@ interface FormValues {
   country: Country;
 }
 
+type InputValues = {
+  [key in LanguageLabel]: string;
+};
+
+const translateText = async (text: string, target: string): Promise<string> => {
+  // const key = env.GOOGLE_TRANSLATE_API_KEY;
+  const res = await fetch(
+    `https://translation.googleapis.com/language/translate/v2?key=AIzaSyDQrxShV3XQsYSk6Kq_-tQefpvL8rnampQ&q=${text}&target=${target}`,
+    {
+      method: "POST",
+    }
+  );
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const data = await res.json();
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return
+  return data.data.translations[0].translatedText;
+};
+
 const Countries: Country[] = [
   { name: "🇰🇷 Korea, Republic of", code: "KR" },
   { name: "🇺🇸 United States", code: "US" },
@@ -20,12 +41,43 @@ const Countries: Country[] = [
   { name: "🇻🇳 Vietnam", code: "VN" },
 ];
 
-const ContactForm = () => {
+const TranslationForm = () => {
   const [formValues, setFormValues] = useState<FormValues>({
     key: "",
     value: "",
     country: Countries[0] || { name: "", code: "" },
   });
+  const [translation, setTranslation] = useState<InputValues>({
+    ko: "",
+    en: "",
+    ja: "",
+    vi: "",
+  });
+
+  const { isLoading, mutate } = useMutation(
+    ["translateText", formValues.value],
+    async () => {
+      const { value } = formValues;
+      const results = await Promise.all([
+        translateText(value, "ko"),
+        translateText(value, "en"),
+        translateText(value, "ja"),
+        translateText(value, "vi"),
+      ]);
+      return {
+        ko: results[0],
+        en: results[1],
+        ja: results[2],
+        vi: results[3],
+      };
+    },
+    {
+      onSuccess: (data) => {
+        setTranslation(data);
+        console.log(data);
+      },
+    }
+  );
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -39,7 +91,6 @@ const ContactForm = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formValues);
     // submit form values to server or API
   };
 
@@ -156,4 +207,4 @@ const ContactForm = () => {
   );
 };
 
-export default ContactForm;
+export default TranslationForm;
