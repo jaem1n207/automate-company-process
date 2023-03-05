@@ -5,6 +5,7 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { Transition } from "@headlessui/react";
+import { useFocus } from "@/hooks/useFocus";
 
 interface EditableInputProps {
   label: string;
@@ -13,13 +14,16 @@ interface EditableInputProps {
 }
 
 const EditableInput = memo(({ label, value, onChange }: EditableInputProps) => {
+  const { inputRef, setIsFocused } = useFocus<HTMLInputElement>();
+
   const [isEditing, setIsEditing] = useState(false);
   const [newValue, setNewValue] = useState("");
 
   const handleEditClick = useCallback(() => {
     setIsEditing(true);
     setNewValue(value);
-  }, [value]);
+    setIsFocused(true);
+  }, [setIsFocused, value]);
 
   const handleSaveClick = useCallback(() => {
     setIsEditing(false);
@@ -49,6 +53,7 @@ const EditableInput = memo(({ label, value, onChange }: EditableInputProps) => {
       </label>
       <div className="relative rounded-lg border border-gray-300 bg-white">
         <input
+          ref={inputRef}
           id={label}
           type="text"
           value={isEditing ? newValue : value}
