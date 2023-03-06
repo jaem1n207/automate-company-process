@@ -36,27 +36,24 @@ const TranslationForm = () => {
   const [fileKey, setFileKey] = useState("");
   const [text, setText] = useState("");
   const { isError, validateInput } = useRequiredKebabCaseValidator();
-  console.log(
-    "🚀 ~ file: TranslationForm.tsx:38 ~ TranslationForm ~ isError:",
-    isError,
-    regex.kebakCase.test(text),
-    new RegExp(/^[a-z]+(-[a-z]+)*$/).test(text)
-  );
   const { ko, en, ja, vi, isLoading, translateText } = useTranslate();
   const [langPath] = useLocalStorage<string>("langPath", "");
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setText(value);
-    validateInput(value);
   };
 
   const handleFileKeyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFileKey(event.target.value);
+    const { value } = event.target;
+    setFileKey(value);
+    validateInput(value);
   };
 
   const handleTranslateClick = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (isError) return;
 
     if (!langPath) {
       return toast.info("`langPath`를 먼저 설정해주세요.");

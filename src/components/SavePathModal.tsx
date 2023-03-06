@@ -21,6 +21,8 @@ const SavePathModal = ({ initialValue, visible, onClose, onSave }: Props) => {
   const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (error) return;
+
     if (value.trim() === "") {
       setError("값을 입력해주세요.");
     } else {
@@ -38,6 +40,13 @@ const SavePathModal = ({ initialValue, visible, onClose, onSave }: Props) => {
       setError("유효한 디렉토리 경로를 입력해주세요.");
     } else {
       setError("");
+    }
+  };
+
+  const handleCancel = () => {
+    if (initialValue) {
+      onClose();
+      setValue(initialValue);
     }
   };
 
@@ -79,13 +88,7 @@ const SavePathModal = ({ initialValue, visible, onClose, onSave }: Props) => {
       <Dialog
         as="div"
         className="relative z-10"
-        onClose={
-          initialValue
-            ? onClose
-            : () => {
-                return;
-              }
-        }
+        onClose={handleCancel}
         ref={modalRef}
       >
         <Transition.Child
