@@ -1,7 +1,7 @@
 import { type AppType } from "next/app";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, Flip } from "react-toastify";
 
 import { api } from "@/utils/api";
 
@@ -18,7 +18,12 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <Layout>
         <Component {...pageProps} />
       </Layout>
-      <ToastContainer />
+      <ToastContainer
+        transition={Flip}
+        position="top-center"
+        theme="colored"
+        autoClose={3000}
+      />
     </SessionProvider>
   );
 };
