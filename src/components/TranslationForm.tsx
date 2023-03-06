@@ -1,14 +1,17 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { type Translations } from "@/models/language";
 import { useTranslate } from "@/hooks/useTranslation";
 import TranslationResultsInputs from "./TranslationResultsInputs";
 import { hasEmptyOrUndefinedProperty } from "@/utils/object";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { toast } from "react-toastify";
 
 const TranslationForm = () => {
   const [fileKey, setFileKey] = useState("");
   const [text, setText] = useState("");
   const { ko, en, ja, vi, isLoading, translateText } = useTranslate();
+  const [langPath] = useLocalStorage<string>("langPath", "");
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setText(event.target.value);
@@ -20,6 +23,10 @@ const TranslationForm = () => {
 
   const handleTranslateClick = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!langPath) {
+      return toast.info("`langPath`를 먼저 설정해주세요.");
+    }
 
     translateText(text).catch((error) => console.error(error));
   };
