@@ -1,35 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { type Translations } from "@/models/language";
 import { useTranslate } from "@/hooks/useTranslation";
 import TranslationResultsInputs from "./TranslationResultsInputs";
-
-type ObjectWithUndefinedOrString = { [key: string]: string | undefined };
-
-function hasEmptyOrUndefinedProperty(
-  obj: ObjectWithUndefinedOrString
-): boolean {
-  for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      const value = obj[key];
-      if (value === undefined || value === "") {
-        return true;
-      }
-    }
-  }
-  return false;
-}
+import { hasEmptyOrUndefinedProperty } from "@/utils/object";
 
 const TranslationForm = () => {
   const [fileKey, setFileKey] = useState("");
   const [text, setText] = useState("");
   const { ko, en, ja, vi, isLoading, translateText } = useTranslate();
-  const [translations, setTranslations] = useState<Translations>({
-    ko: "",
-    en: "",
-    ja: "",
-    vi: "",
-  });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setText(event.target.value);
@@ -45,11 +24,20 @@ const TranslationForm = () => {
     translateText(text).catch((error) => console.error(error));
   };
 
-  useEffect(() => {
-    if (!isLoading) {
-      setTranslations({ ko, en, ja, vi });
-    }
-  }, [en, isLoading, ja, ko, vi]);
+  const translations: Translations = useMemo(
+    () => ({
+      ko,
+      en,
+      ja,
+      vi,
+    }),
+    [en, ja, ko, vi]
+  );
+
+  const isRenderResultsInputs = useMemo(
+    () => !hasEmptyOrUndefinedProperty(translations) && !isLoading,
+    [isLoading, translations]
+  );
 
   return (
     <div>
@@ -99,7 +87,7 @@ const TranslationForm = () => {
         </div>
       </form>
 
-      {!hasEmptyOrUndefinedProperty(translations) && !isLoading && (
+      {isRenderResultsInputs && (
         <TranslationResultsInputs
           onSubmit={(values) => console.log(values)}
           initialValues={translations}
