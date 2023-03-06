@@ -1,73 +1,34 @@
-import {
-  type Dispatch,
-  type SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect } from "react";
 
-import { window } from "browser-monads-ts";
+export const useLocalStorage = <T>(key: string, initialValue: T) => {
+  const [storedValue, setStoredValue] = useState<T | undefined>();
 
-declare global {
-  interface WindowEventMap {
-    "local-storage": CustomEvent;
-  }
-}
+  const setValue = (value: T) => {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  };
 
-type SetValue<T> = Dispatch<SetStateAction<T>>;
+  useEffect(() => {
+    const value = window.localStorage.getItem(key);
 
-export const useLocalStorage = <T>(
-  key: string,
-  initialValue: T
-): [T, SetValue<T>] => {
-  const readValue = useCallback((): T => {
-    try {
-      const item = window.localStorage.getItem(key);
-      return item ? (JSON.parse(item) as T) : initialValue;
-    } catch (error) {
-      console.warn(`Error reading localStorage key "${key}":`, error);
-      return initialValue;
-    }
-  }, [initialValue, key]);
-
-  const [storedValue, setStoredValue] = useState<T>(readValue);
-
-  const setValue: SetValue<T> = useCallback(
-    (value: T | ((val: T) => T)) => {
+    if (value) {
       try {
-        const valueToStore =
-          value instanceof Function ? value(storedValue) : value;
-
-        window.localStorage.setItem(key, JSON.stringify(valueToStore));
-
-        setStoredValue(valueToStore);
-
-        window.dispatchEvent(new Event("local-storage"));
+        const parsed = JSON.parse(value) as T;
+        setStoredValue(parsed);
       } catch (error) {
-        console.warn(`Error setting localStorage key "${key}":`, error);
+        console.log(error);
+        setStoredValue(initialValue);
       }
-    },
-    [key, storedValue]
-  );
+    } else {
+      setStoredValue(initialValue);
+    }
+  }, []);
 
   useEffect(() => {
-    setStoredValue(readValue());
-  }, [readValue]);
+    if (storedValue) {
+      setValue(storedValue);
+    }
+  }, [storedValue]);
 
-  useEffect(() => {
-    const handleStorageChange = (e: StorageEvent | CustomEvent) => {
-      if ((e as StorageEvent)?.key && (e as StorageEvent).key !== key) return;
-      setStoredValue(readValue());
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-    window.addEventListener("local-storage", handleStorageChange);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-      window.removeEventListener("local-storage", handleStorageChange);
-    };
-  }, [key, readValue]);
-
-  return [storedValue, setValue];
+  return [storedValue as T, setStoredValue] as const;
 };
