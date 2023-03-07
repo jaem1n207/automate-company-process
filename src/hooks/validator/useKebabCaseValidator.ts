@@ -1,15 +1,14 @@
 import { regex } from "@/utils/regex";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 export const useKebabCaseValidator = (errorMessage?: string) => {
   const [isError, setIsError] = useState<boolean>(false);
 
-  const validateInput = (value: string) => {
-    // const isValid = regex.kebakCase.test(value.trim());
-    const isValid = regex.kebakCase.test(value);
+  const validateInput = useCallback((value: string) => {
+    const isValid = regex.kebakCase.test(value.trim());
     setIsError(!isValid);
     return isValid;
-  };
+  }, []);
 
   return {
     name: "kebabCase",

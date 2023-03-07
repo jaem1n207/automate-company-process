@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 export const useCreateMixedValidator = <T>(
   ...validators: Array<{
@@ -22,11 +22,15 @@ export const useCreateMixedValidator = <T>(
     return isValid;
   };
 
-  const validatorList = validators.map(({ name, errorMessage, isError }) => ({
-    name,
-    errorMessage,
-    isError,
-  }));
+  const validatorList = useMemo(
+    () =>
+      validators.map(({ name, errorMessage, isError }) => ({
+        name,
+        errorMessage,
+        isError,
+      })),
+    [validators]
+  );
 
   return {
     isError,

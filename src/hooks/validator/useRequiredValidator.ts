@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 export const useRequiredValidator = (errorMessage?: string) => {
   const [isError, setIsError] = useState<boolean>(false);
 
-  const validateInput = (value: string) => {
+  const validateInput = useCallback((value: string) => {
     const isValid = value.trim().length > 0;
     setIsError(!isValid);
     return isValid;
-  };
+  }, []);
 
   return {
     name: "required",
