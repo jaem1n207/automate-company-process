@@ -8,13 +8,8 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { toast } from "react-toastify";
 import { useKebabCaseValidator } from "@/hooks/validator";
 import { useRequiredValidator } from "@/hooks/validator/useRequiredValidator";
-import { createMixedValidator } from "@/hooks/validator/createMixedValidator";
+import { useCreateMixedValidator } from "@/hooks/validator/createMixedValidator";
 import { regex } from "@/utils/regex";
-
-const useRequiredKebabCaseValidator = createMixedValidator(
-  useRequiredValidator,
-  useKebabCaseValidator
-);
 
 // const useRequiredKebabCaseValidator = () => {
 //   const { isError: isKebabCaseError, validateInput: validateKebabCase } =
@@ -35,7 +30,10 @@ const useRequiredKebabCaseValidator = createMixedValidator(
 const TranslationForm = () => {
   const [fileKey, setFileKey] = useState("");
   const [text, setText] = useState("");
-  const { isError, validateInput } = useRequiredKebabCaseValidator();
+  const combinedValidator = useCreateMixedValidator(
+    useRequiredValidator(),
+    useKebabCaseValidator()
+  );
   const { ko, en, ja, vi, isLoading, translateText } = useTranslate();
   const [langPath] = useLocalStorage<string>("langPath", "");
 
@@ -47,13 +45,13 @@ const TranslationForm = () => {
   const handleFileKeyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setFileKey(value);
-    validateInput(value);
+    combinedValidator.validateInput(value);
   };
 
   const handleTranslateClick = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (isError) return;
+    if (combinedValidator.isError) return;
 
     if (!langPath) {
       return toast.info("`langPath`를 먼저 설정해주세요.");
@@ -93,7 +91,16 @@ const TranslationForm = () => {
             required
             className="w-full rounded-md border px-4 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          {isError && <div style={{ color: "red" }}>Invalid input</div>}
+          {combinedValidator.isError && (
+            <ul>
+              {combinedValidator.validators.map(
+                (validator) =>
+                  validator.isError && (
+                    <li key={validator.name}>{validator.errorMessage}</li>
+                  )
+              )}
+            </ul>
+          )}
         </div>
 
         <div className="mb-4">
