@@ -1,5 +1,8 @@
 import axios from "axios";
 import { useState } from "react";
+import { toast } from "react-toastify";
+
+import { type Translations } from "@/models/language";
 
 const API_ENDPOINT = "https://translation.googleapis.com/language/translate/v2";
 
@@ -24,7 +27,7 @@ type ResponseTranslate = {
 
 export const useTranslate = (): UseTranslateResult => {
   const [isLoading, setIsLoading] = useState(false);
-  const [translations, setTranslations] = useState({
+  const [translations, setTranslations] = useState<Translations>({
     ko: undefined,
     en: undefined,
     ja: undefined,
@@ -61,15 +64,11 @@ export const useTranslate = (): UseTranslateResult => {
         translate(text, "ja"),
         translate(text, "vi"),
       ]);
-      if (!ko || !en || !ja || !vi) {
-        throw new Error("No translation found");
-      }
-
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       setTranslations({ ko, en, ja, vi });
     } catch (error) {
-      console.error(error);
+      toast("번역에 실패했어요. 잠시 후 다시 시도해주세요.", {
+        type: "info",
+      });
       setTranslations({
         ko: undefined,
         en: undefined,

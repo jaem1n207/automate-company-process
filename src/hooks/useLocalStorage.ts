@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 export const useLocalStorage = <T>(key: string, initialValue: T) => {
   const [storedValue, setStoredValue] = useState<T | undefined>();
@@ -16,8 +17,10 @@ export const useLocalStorage = <T>(key: string, initialValue: T) => {
         const parsed = JSON.parse(value) as T;
         setStoredValue(parsed);
       } catch (error) {
-        console.log(error);
         setStoredValue(initialValue);
+        toast("local-storage에 저장된 값이 올바르지 않아요.", {
+          type: "info",
+        });
       }
     } else {
       setStoredValue(initialValue);
