@@ -1,3 +1,3 @@
-# Create T3 App
+# Automate company process
 
 일 자동화
