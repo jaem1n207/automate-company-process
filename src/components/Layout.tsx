@@ -4,6 +4,8 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { classNames } from "@/utils/classes";
+import Link from "next/link";
+import { ROUTES } from "@/enum";
 
 const navigation = [
   { name: "Dashboard", href: "/", current: false },
@@ -12,10 +14,19 @@ const navigation = [
 
 interface LayoutProps {
   children: React.ReactNode;
+  /**
+   * 현재 페이지의 경로
+   *
+   * 전달받은 페이지의 경로에는 레이아웃을 적용하지 않습니다.
+   */
+  path?: string;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC<LayoutProps> = ({ children, path: pathProp }) => {
   const router = useRouter();
+
+  // 현재 페이지가 주어진 경로와 일치하는지 확인
+  const isMatchingPath = router.pathname === pathProp;
 
   React.useEffect(() => {
     const path = router.pathname;
@@ -23,6 +34,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       navItem.current = navItem.href === path;
     });
   }, [router.pathname]);
+
+  if (isMatchingPath) {
+    return <>{children}</>;
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -35,7 +50,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   <div className="flex-shrink-0">
                     <Image
                       className="h-8 w-8"
-                      src="/favicon.png"
+                      src="/favicon-512.png"
                       alt="logo"
                       width={32}
                       height={32}
@@ -60,6 +75,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                       ))}
                     </div>
                   </div>
+                </div>
+                <div className="ml-10 flex items-baseline space-x-4">
+                  <Link
+                    href={ROUTES.TEAM_SELECTION}
+                    className="rounded-md bg-indigo-800 px-3 py-2 text-sm font-medium text-white"
+                  >
+                    팀 선택 다시 하기
+                  </Link>
                 </div>
                 <div className="-mr-2 flex md:hidden">
                   <Disclosure.Button className="inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
@@ -99,7 +122,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </Disclosure>
 
       <header className="bg-white">
-        <div className="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           <h1 className="text-4xl font-bold text-gray-900">
             {router.pathname === "/" ? "Dashboard" : "Editor"}
           </h1>
