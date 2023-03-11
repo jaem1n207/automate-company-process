@@ -11,18 +11,21 @@ interface TeamOption {
   label: string;
   value: Team;
   icon: JSX.Element;
+  modalIcon: JSX.Element;
 }
 
 const teamOptions: TeamOption[] = [
   {
     label: "Dashboard",
     value: "dashboard",
-    icon: <DashboardIcon className="h-16 w-16" />,
+    icon: <DashboardIcon className="h-2/6 w-2/4" />,
+    modalIcon: <DashboardIcon />,
   },
   {
     label: "Editor",
     value: "editor",
-    icon: <EditorIcon className="h-16 w-16" />,
+    icon: <EditorIcon className="h-2/6 w-2/4" />,
+    modalIcon: <EditorIcon />,
   },
 ];
 
@@ -52,14 +55,15 @@ const OptionCard = ({ option, selected, onClick }: OptionCardProps) => {
       <div
         className={`select-none hover:border-blue-500 hover:shadow-lg ${
           selected === option.value ? "border-blue-500" : "border-gray-300"
-        } cursor-pointer rounded-lg border
-      p-8 transition-all duration-300 ease-in-out`}
+        } h-full cursor-pointer rounded-lg border p-24 transition-all duration-300 ease-in-out`}
         onClick={onClick}
       >
         <div className="mb-8 flex items-center justify-center">
           {option.icon}
         </div>
-        <div className="text-center font-medium">{option.label}</div>
+        <div className="text-center text-lg font-medium md:text-3xl">
+          {option.label}
+        </div>
       </div>
     </motion.div>
   );
@@ -107,7 +111,7 @@ const TeamSelection = () => {
       <NextSeo {...SEO} />
       <div className="flex h-screen items-center justify-center bg-gray-100">
         <motion.div
-          className="grid grid-cols-1 gap-4 md:grid-cols-2"
+          className="md:(h-4/6 w-4/6) grid grid-cols-1 gap-4 md:grid-cols-2"
           initial="hidden"
           animate="visible"
           variants={cardListVariants}
@@ -170,18 +174,15 @@ const TeamSelectionModal = ({
         {...modalContentVariants}
         className="fixed top-0 bottom-0 left-0 right-0 flex items-center justify-center"
       >
-        <div className="w-full rounded-lg bg-white p-8 shadow-lg md:w-1/2">
-          <h2 className="mb-4 text-center text-lg font-bold">
-            {selectedTeam === "dashboard" ? "대시보드" : "에디터"}팀을
-            선택하셨어요
+        <div className="w-full rounded-lg bg-white p-8 shadow-lg md:w-1/4">
+          <h2 className="mb-4 text-center text-lg font-bold md:text-3xl">
+            &lsquo;{selectedTeam === "dashboard" ? "대시보드" : "에디터"}
+            &rsquo;팀을 선택하셨어요
           </h2>
           <div className="mb-8 flex items-center justify-center">
-            {selectedOption?.icon}
+            {selectedOption?.modalIcon}
           </div>
-          <div className="text-center text-lg font-medium">
-            {selectedOption?.label}
-          </div>
-          <div className="mt-8 flex justify-center">
+          <div className="mt-8 flex justify-center text-sm md:text-base">
             <button
               className="mr-4 rounded-lg bg-gray-300 px-4 py-2 text-gray-800"
               onClick={onCancel}
