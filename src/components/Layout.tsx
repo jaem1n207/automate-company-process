@@ -24,17 +24,13 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children, path: pathProp }) => {
   const router = useRouter();
-  const [myTeam, setMyTeam] = React.useState<string>();
 
   // 현재 페이지가 주어진 경로와 일치하는지 확인
   const isMatchingPath = router.pathname === pathProp;
 
-  React.useEffect(() => {
-    const team = localStorage.getItem("my-team");
-    if (team) {
-      setMyTeam(team);
-    }
-  }, []);
+  const resetMyTeam = () => {
+    localStorage.removeItem("my-team");
+  };
 
   // React.useEffect(() => {
   //   const path = router.pathname;
@@ -84,18 +80,17 @@ const Layout: React.FC<LayoutProps> = ({ children, path: pathProp }) => {
                     </div>
                   </div> */}
                 </div>
-                {myTeam && (
-                  <div className="hidden md:block">
-                    <div className="ml-10 flex items-baseline space-x-4">
-                      <Link
-                        href={ROUTES.TEAM_SELECTION}
-                        className="rounded-md bg-indigo-800 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-700"
-                      >
-                        팀 선택 다시 하기
-                      </Link>
-                    </div>
+                <div className="hidden md:block">
+                  <div className="ml-10 flex items-baseline space-x-4">
+                    <Link
+                      href={ROUTES.TEAM_SELECTION}
+                      onClick={resetMyTeam}
+                      className="rounded-md bg-indigo-800 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+                    >
+                      팀 선택 다시 하기
+                    </Link>
                   </div>
-                )}
+                </div>
                 <div className="-mr-2 flex md:hidden">
                   <Disclosure.Button className="inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                     <span className="sr-only">Open main menu</span>
@@ -113,6 +108,9 @@ const Layout: React.FC<LayoutProps> = ({ children, path: pathProp }) => {
               <div className="space-y-1 px-2 pt-2 pb-3 sm:px-3">
                 <Disclosure.Button
                   key="Team Selection"
+                  as="a"
+                  href={ROUTES.TEAM_SELECTION}
+                  onAuxClick={resetMyTeam}
                   className={classNames(
                     "text-gray-300 hover:bg-gray-700 hover:text-white",
                     "block rounded-md px-3 py-2 text-base font-medium"

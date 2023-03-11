@@ -1,1 +1,1 @@
-export type Team = "dashboard" | "editor" | "unknown";
+export type Team = "dashboard" | "editor";
