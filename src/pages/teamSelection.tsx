@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { type Variants, motion } from "framer-motion";
 import { DashboardIcon, EditorIcon } from "@/components/icons";
-import { ROUTES } from "@/enum";
+import { LOCAL_STORAGE_KEYS, ROUTES } from "@/enum";
 import { type Team } from "@/models/team";
 import { useSEO } from "@/hooks/useSEO";
 import { NextSeo } from "next-seo";
@@ -85,7 +85,7 @@ const TeamSelection = () => {
   const handleOK = () => {
     if (!selectedTeam) return;
 
-    localStorage.setItem("my-team", selectedTeam);
+    localStorage.setItem(LOCAL_STORAGE_KEYS.MY_TEAM, selectedTeam);
     if (selectedTeam === "dashboard") {
       void router.push(ROUTES.DASHBOARD);
     } else if (selectedTeam === "editor") {

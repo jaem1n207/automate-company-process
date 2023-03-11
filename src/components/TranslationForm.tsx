@@ -10,6 +10,7 @@ import { useKebabCaseValidator } from "@/hooks/validator";
 import { useRequiredValidator } from "@/hooks/validator/useRequiredValidator";
 import { useCreateMixedValidator } from "@/hooks/validator/createMixedValidator";
 import { regex } from "@/utils/regex";
+import { LOCAL_STORAGE_KEYS } from "@/enum";
 
 // const useRequiredKebabCaseValidator = () => {
 //   const { isError: isKebabCaseError, validateInput: validateKebabCase } =
@@ -35,7 +36,7 @@ const TranslationForm = () => {
     useKebabCaseValidator()
   );
   const { ko, en, ja, vi, isLoading, translateText } = useTranslate();
-  const [langPath] = useLocalStorage<string>("langPath", "");
+  const [langPath] = useLocalStorage<string>(LOCAL_STORAGE_KEYS.LANG_PATH, "");
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;

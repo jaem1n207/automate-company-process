@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { classNames } from "@/utils/classes";
 import Link from "next/link";
-import { ROUTES } from "@/enum";
+import { LOCAL_STORAGE_KEYS, ROUTES } from "@/enum";
 
 // const navigation = [
 //   { name: "Dashboard", href: "/", current: false },
@@ -29,7 +29,7 @@ const Layout: React.FC<LayoutProps> = ({ children, path: pathProp }) => {
   const isMatchingPath = router.pathname === pathProp;
 
   const resetMyTeam = () => {
-    localStorage.removeItem("my-team");
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.MY_TEAM);
   };
 
   // React.useEffect(() => {
@@ -144,7 +144,7 @@ const Layout: React.FC<LayoutProps> = ({ children, path: pathProp }) => {
       <header className="bg-white">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           <h1 className="text-4xl font-bold text-gray-900">
-            {router.pathname === "/" ? "Dashboard" : "Editor"}
+            조직: {router.pathname === "/" ? "Dashboard" : "Editor"}
           </h1>
         </div>
       </header>

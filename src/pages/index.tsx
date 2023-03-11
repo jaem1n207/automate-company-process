@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { useSEO } from "@/hooks/useSEO";
 import { NextSeo } from "next-seo";
 import { useRedirectToTeamSelectionPage } from "@/hooks/useRedirectToTeamSelectionPage";
+import { LOCAL_STORAGE_KEYS } from "@/enum";
 
 const Home: NextPage = () => {
   const SEO = useSEO({
@@ -20,7 +21,10 @@ const Home: NextPage = () => {
   useRedirectToTeamSelectionPage();
 
   // const hello = api.example.hello.useQuery({ text: "from tRPC" });
-  const [langPath, setLangPath] = useLocalStorage<string>("langPath", "");
+  const [langPath, setLangPath] = useLocalStorage<string>(
+    LOCAL_STORAGE_KEYS.LANG_PATH,
+    ""
+  );
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleModalSave = (value: string) => {

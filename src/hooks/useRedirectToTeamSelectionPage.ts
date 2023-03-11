@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { ROUTES } from "@/enum";
+import { LOCAL_STORAGE_KEYS, ROUTES } from "@/enum";
 
 export const useRedirectToTeamSelectionPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const myTeam = window.localStorage.getItem("my-team");
+    const myTeam = window.localStorage.getItem(LOCAL_STORAGE_KEYS.MY_TEAM);
 
     if (myTeam === "dashboard") {
       void router.push(ROUTES.DASHBOARD);
