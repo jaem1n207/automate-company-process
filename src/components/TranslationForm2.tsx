@@ -3,6 +3,7 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import { type LanguageLabel } from "@/models/language";
 import { useMutation } from "@tanstack/react-query";
+import { env } from "@/env.mjs";
 
 interface Country {
   name: string;
@@ -20,9 +21,8 @@ type InputValues = {
 };
 
 const translateText = async (text: string, target: string): Promise<string> => {
-  // const key = env.GOOGLE_TRANSLATE_API_KEY;
   const res = await fetch(
-    `https://translation.googleapis.com/language/translate/v2?key=AIzaSyDQrxShV3XQsYSk6Kq_-tQefpvL8rnampQ&q=${text}&target=${target}`,
+    `https://translation.googleapis.com/language/translate/v2?key=${env.NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY}&q=${text}&target=${target}`,
     {
       method: "POST",
     }

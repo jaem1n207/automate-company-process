@@ -29,8 +29,8 @@ const server = z.object({
  */
 const client = z.object({
   // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
-  GOOGLE_TRANSLATE_API_KEY: z.string().min(1),
-  GOOGLE_CLOUD_PROJECT_ID: z.string().min(1),
+  NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY: z.string().min(1),
+  NEXT_PUBLIC_GOOGLE_CLOUD_PROJECT_ID: z.string().min(1),
 });
 
 /**
@@ -47,8 +47,10 @@ const processEnv = {
   DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
   DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
   // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
-  GOOGLE_TRANSLATE_API_KEY: process.env.GOOGLE_TRANSLATE_API_KEY,
-  GOOGLE_CLOUD_PROJECT_ID: process.env.GOOGLE_CLOUD_PROJECT_ID,
+  NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY:
+    process.env.NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY,
+  NEXT_PUBLIC_GOOGLE_CLOUD_PROJECT_ID:
+    process.env.NEXT_PUBLIC_GOOGLE_CLOUD_PROJECT_ID,
 };
 
 // Don't touch the part below

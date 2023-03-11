@@ -3,6 +3,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 
 import { type Translations } from "@/models/language";
+import { env } from "@/env.mjs";
 
 const API_ENDPOINT = "https://translation.googleapis.com/language/translate/v2";
 
@@ -43,7 +44,7 @@ export const useTranslate = (): UseTranslateResult => {
       },
       {
         params: {
-          key: "AIzaSyDQrxShV3XQsYSk6Kq_-tQefpvL8rnampQ",
+          key: env.NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY,
         },
       }
     );
