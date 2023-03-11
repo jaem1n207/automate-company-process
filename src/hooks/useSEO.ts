@@ -1,9 +1,9 @@
-// import { env } from "@/env.mjs";
+import { metadata } from "@/utils/metadata";
 import { type NextSeoProps } from "next-seo";
 import { useRouter } from "next/router";
 
 interface SEOProps {
-  title?: string;
+  title: string;
   description?: string;
   image?: string;
 }
@@ -16,17 +16,19 @@ export const useSEO = ({
   const router = useRouter();
   const { pathname } = router;
 
-  // const websiteUrl = isDev ? env.NEXTAUTH_URL : "notyet.com";
-
-  const title = titleProp ?? "Archi ﹒ Automate";
+  const title = `${metadata.title}${titleProp}`;
   const description =
     descriptionProp ?? "Automate Archisketch Process for Archisketch Team";
-  // const url = `${websiteUrl}${pathname}`;
-  // const image = imageProp ?? `${websiteUrl}/favicon.png`;
-  const url = `https://archi-automate.vercel.app${pathname}`;
-  const image = imageProp ?? `https://archi-automate.vercel.app/favicon.png`;
+  const url = `${metadata.url}${pathname}`;
+  const image = imageProp ?? metadata.image;
 
   return {
+    additionalLinkTags: [
+      {
+        rel: "icon",
+        href: "/favicon.png",
+      },
+    ],
     title,
     description,
     canonical: url,
@@ -41,7 +43,7 @@ export const useSEO = ({
           url: image,
           width: 1200,
           height: 630,
-          alt: "Ben ﹒ Automate",
+          alt: "Archi ﹒ Automate",
         },
       ],
     },

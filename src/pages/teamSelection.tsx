@@ -4,6 +4,8 @@ import { type Variants, motion } from "framer-motion";
 import { DashboardIcon, EditorIcon } from "@/components/icons";
 import { ROUTES } from "@/enum";
 import { type Team } from "@/models/team";
+import { useSEO } from "@/hooks/useSEO";
+import { NextSeo } from "next-seo";
 
 interface TeamOption {
   label: string;
@@ -48,9 +50,10 @@ const OptionCard = ({ option, selected, onClick }: OptionCardProps) => {
   return (
     <motion.div variants={cardVariants}>
       <div
-        className={`cursor-pointer rounded-lg border p-8 ${
+        className={`select-none hover:border-blue-500 hover:shadow-lg ${
           selected === option.value ? "border-blue-500" : "border-gray-300"
-        }`}
+        } cursor-pointer rounded-lg border
+      p-8 transition-all duration-300 ease-in-out`}
         onClick={onClick}
       >
         <div className="mb-8 flex items-center justify-center">
@@ -63,6 +66,11 @@ const OptionCard = ({ option, selected, onClick }: OptionCardProps) => {
 };
 
 const TeamSelection = () => {
+  const SEO = useSEO({
+    title: "Team Selection",
+    description: "Automate Archisketch Process for Archisktch Team",
+  });
+
   const [selectedTeam, setSelectedTeam] = useState<Team | undefined>();
   const router = useRouter();
 
@@ -95,31 +103,34 @@ const TeamSelection = () => {
   };
 
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-100">
-      <motion.div
-        className="grid grid-cols-1 gap-4 md:grid-cols-2"
-        initial="hidden"
-        animate="visible"
-        variants={cardListVariants}
-      >
-        {teamOptions.map((option) => (
-          <OptionCard
-            key={option.value}
-            option={option}
-            selected={selectedTeam}
-            onClick={() => setSelectedTeam(option.value)}
-          />
-        ))}
-      </motion.div>
+    <>
+      <NextSeo {...SEO} />
+      <div className="flex h-screen items-center justify-center bg-gray-100">
+        <motion.div
+          className="grid grid-cols-1 gap-4 md:grid-cols-2"
+          initial="hidden"
+          animate="visible"
+          variants={cardListVariants}
+        >
+          {teamOptions.map((option) => (
+            <OptionCard
+              key={option.value}
+              option={option}
+              selected={selectedTeam}
+              onClick={() => setSelectedTeam(option.value)}
+            />
+          ))}
+        </motion.div>
 
-      {selectedTeam && (
-        <TeamSelectionModal
-          selectedTeam={selectedTeam}
-          onCancel={handleCancel}
-          onOK={handleOK}
-        />
-      )}
-    </div>
+        {selectedTeam && (
+          <TeamSelectionModal
+            selectedTeam={selectedTeam}
+            onCancel={handleCancel}
+            onOK={handleOK}
+          />
+        )}
+      </div>
+    </>
   );
 };
 
