@@ -12,6 +12,7 @@ import LoadingButton from "./common/LoadingButton";
 import { isEmptryString } from "@/utils/assertions";
 import { useCreateMixedValidator } from "@/hooks/validator/createMixedValidator";
 import { useKebabCaseValidator, useRequiredValidator } from "@/hooks/validator";
+import ErrorLabelList from "./common/ErrorLabelList";
 
 // const useRequiredKebabCaseValidator = () => {
 //   const { isError: isKebabCaseError, validateInput: validateKebabCase } =
@@ -36,14 +37,7 @@ const TranslationForm = () => {
     useRequiredValidator(),
     useKebabCaseValidator()
   );
-  console.log(
-    "🚀 ~ file: TranslationForm.tsx:39 ~ TranslationForm ~ fileKeyCombinedValidator:",
-    fileKeyCombinedValidator
-  );
-  const textCombinedValidator = useCreateMixedValidator(
-    useRequiredValidator(),
-    useKebabCaseValidator()
-  );
+  const textCombinedValidator = useCreateMixedValidator(useRequiredValidator());
   const { ko, en, ja, vi, isLoading, translateText } = useTranslate();
   const [langPath] = useLocalStorage<string>(LOCAL_STORAGE_KEYS.LANG_PATH, "");
 
@@ -103,14 +97,7 @@ const TranslationForm = () => {
             required
             className="w-full rounded-md border px-4 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <ul>
-            {fileKeyCombinedValidator.validators.map(
-              (validator) =>
-                validator.isError && (
-                  <li key={validator.name}>{validator.errorMessage}</li>
-                )
-            )}
-          </ul>
+          <ErrorLabelList validators={fileKeyCombinedValidator.validators} />
         </div>
 
         <div className="mb-4">
@@ -129,14 +116,7 @@ const TranslationForm = () => {
             required
             className="w-full rounded-md border px-4 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <ul>
-            {textCombinedValidator.validators.map(
-              (validator) =>
-                validator.isError && (
-                  <li key={validator.name}>{validator.errorMessage}</li>
-                )
-            )}
-          </ul>
+          <ErrorLabelList validators={textCombinedValidator.validators} />
         </div>
         <div className="mb-4">
           <LoadingButton
