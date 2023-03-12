@@ -4,7 +4,7 @@ const getBaseUrl = () => {
   if (isDev) {
     return "http://localhost:3000";
   } else {
-    return "https://benjaminchoi.dev";
+    return "https://archisketch-automate-process.vercel.app";
   }
 };
 
@@ -14,5 +14,5 @@ export const metadata = {
   tags: ["react", "typescript", "nextjs", "hooks"],
   url: getBaseUrl(),
   date: "2021-08-30T00:00:00.000Z",
-  image: `${getBaseUrl()}/images/og-image.png`,
+  image: `${getBaseUrl()}/og-image.jpg`,
 };
