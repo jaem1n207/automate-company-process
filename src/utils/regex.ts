@@ -4,4 +4,5 @@ export const regex = {
   password: new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})"),
   url: new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})"),
   directoryPath: new RegExp("^(.+)/([^/]+)$"),
+  onlySpecialCharacters: new RegExp("^[^wㄱ-ㅎㅏ-ㅣ가-힣s]*$"),
 };

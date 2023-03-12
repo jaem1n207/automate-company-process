@@ -11,7 +11,7 @@ export const useRequiredValidator = (errorMessage?: string) => {
 
   return {
     name: "required",
-    errorMessage: errorMessage ?? "Input is required",
+    errorMessage: errorMessage ?? "필수값이 비어있습니다.",
     isError,
     validateInput,
   };

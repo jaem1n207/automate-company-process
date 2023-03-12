@@ -12,7 +12,7 @@ export const useKebabCaseValidator = (errorMessage?: string) => {
 
   return {
     name: "kebabCase",
-    errorMessage: errorMessage ?? "Input must be in kebab-case format",
+    errorMessage: errorMessage ?? "kebab-case 형식으로 작성해주세요.",
     isError,
     validateInput,
   };

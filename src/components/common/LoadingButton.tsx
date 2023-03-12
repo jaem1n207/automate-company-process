@@ -57,6 +57,10 @@ const LoadingButton = ({
     }
   };
 
+  const commonStyleProps = `relative flex items-center justify-center gap-2 hover:shadow-lg  w-full rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white ${className}`;
+  const isLoadingStyleProps = isLoading ? `cursor-wait, opacity-50` : ``;
+  const disabledStyleProps = isDisabled ? `cursor-not-allowed` : ``;
+
   const motionProps = isDisabled
     ? { animate: { opacity: 0.5 } }
     : {
@@ -72,11 +76,7 @@ const LoadingButton = ({
         type={type}
         onClick={handleClick}
         disabled={isDisabled}
-        className={`relative flex items-center justify-center gap-2 ${
-          isDisabled ? "cursor-not-allowed opacity-50" : "hover:shadow-lg"
-        } w-full rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white ${className} ${
-          isLoading || isClicked ? "cursor-wait" : ""
-        }} ${!!disabled ? "cursor-not-allowed" : ""}`}
+        className={`${commonStyleProps} ${isLoadingStyleProps} ${disabledStyleProps}`}
         {...motionProps}
       >
         {isLoading ? (

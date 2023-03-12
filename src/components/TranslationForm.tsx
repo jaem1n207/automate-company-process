@@ -6,11 +6,12 @@ import TranslationResultsInputs from "./TranslationResultsInputs";
 import { hasEmptyOrUndefinedProperty } from "@/utils/object";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { toast } from "react-toastify";
-import { useKebabCaseValidator } from "@/hooks/validator";
-import { useRequiredValidator } from "@/hooks/validator/useRequiredValidator";
-import { useCreateMixedValidator } from "@/hooks/validator/createMixedValidator";
+
 import { LOCAL_STORAGE_KEYS } from "@/enum";
 import LoadingButton from "./common/LoadingButton";
+import { isEmptryString } from "@/utils/assertions";
+import { useCreateMixedValidator } from "@/hooks/validator/createMixedValidator";
+import { useKebabCaseValidator, useRequiredValidator } from "@/hooks/validator";
 
 // const useRequiredKebabCaseValidator = () => {
 //   const { isError: isKebabCaseError, validateInput: validateKebabCase } =
@@ -31,7 +32,15 @@ import LoadingButton from "./common/LoadingButton";
 const TranslationForm = () => {
   const [fileKey, setFileKey] = useState("");
   const [text, setText] = useState("");
-  const combinedValidator = useCreateMixedValidator(
+  const fileKeyCombinedValidator = useCreateMixedValidator(
+    useRequiredValidator(),
+    useKebabCaseValidator()
+  );
+  console.log(
+    "🚀 ~ file: TranslationForm.tsx:39 ~ TranslationForm ~ fileKeyCombinedValidator:",
+    fileKeyCombinedValidator
+  );
+  const textCombinedValidator = useCreateMixedValidator(
     useRequiredValidator(),
     useKebabCaseValidator()
   );
@@ -40,19 +49,21 @@ const TranslationForm = () => {
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
+    textCombinedValidator.validateInput(value);
     setText(value);
   };
 
   const handleFileKeyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
+    fileKeyCombinedValidator.validateInput(value);
     setFileKey(value);
-    combinedValidator.validateInput(value);
   };
 
   const handleTranslateClick = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (combinedValidator.isError) return;
+    if (fileKeyCombinedValidator.isError) return;
+    if (textCombinedValidator.isError) return;
 
     if (!langPath) {
       return toast.info("`langPath`를 먼저 설정해주세요.");
@@ -92,16 +103,14 @@ const TranslationForm = () => {
             required
             className="w-full rounded-md border px-4 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          {combinedValidator.isError && (
-            <ul>
-              {combinedValidator.validators.map(
-                (validator) =>
-                  validator.isError && (
-                    <li key={validator.name}>{validator.errorMessage}</li>
-                  )
-              )}
-            </ul>
-          )}
+          <ul>
+            {fileKeyCombinedValidator.validators.map(
+              (validator) =>
+                validator.isError && (
+                  <li key={validator.name}>{validator.errorMessage}</li>
+                )
+            )}
+          </ul>
         </div>
 
         <div className="mb-4">
@@ -120,12 +129,25 @@ const TranslationForm = () => {
             required
             className="w-full rounded-md border px-4 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+          <ul>
+            {textCombinedValidator.validators.map(
+              (validator) =>
+                validator.isError && (
+                  <li key={validator.name}>{validator.errorMessage}</li>
+                )
+            )}
+          </ul>
         </div>
         <div className="mb-4">
           <LoadingButton
             type="submit"
             isLoading={isLoading}
-            disabled={!fileKey || !text}
+            disabled={
+              isEmptryString(fileKey) ||
+              isEmptryString(text) ||
+              textCombinedValidator.isError ||
+              fileKeyCombinedValidator.isError
+            }
           >
             번역 실행
           </LoadingButton>
