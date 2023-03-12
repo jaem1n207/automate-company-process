@@ -4,6 +4,13 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { regex } from "@/utils/regex";
 import { XMarkIcon } from "@heroicons/react/24/solid";
+import axios, { type AxiosResponse } from "axios";
+import {
+  type ReadLangFilesParamsType,
+  type ReadLangFIlesReturnType,
+} from "@/models/api";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
 type Props = {
   initialValue: string;
@@ -15,19 +22,47 @@ type Props = {
 const SavePathModal = ({ initialValue, visible, onClose, onSave }: Props) => {
   const [value, setValue] = useState("");
   const [error, setError] = useState("");
+  const router = useRouter();
 
   const modalRef = useRef<HTMLDivElement>(null);
 
-  const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (error) return;
 
     if (value.trim() === "") {
       setError("값을 입력해주세요.");
-    } else {
+      return;
+    }
+
+    try {
+      const params: ReadLangFilesParamsType = {
+        langPath: value,
+      };
+
+      const { data } = await axios.get<ReadLangFIlesReturnType>(
+        "/api/readLangFiles",
+        {
+          params,
+        }
+      );
       onSave(value);
+      toast.success(data.message);
       onClose();
+      router.reload();
+    } catch (error) {
+      console.error(error);
+
+      if (axios.isAxiosError(error)) {
+        const { response } = error;
+        if (response) {
+          const { data } = response as AxiosResponse<ReadLangFIlesReturnType>;
+          return toast.error(data.message);
+        }
+      }
+
+      return toast.error("langPath를 저장하는데 실패했어요. :(");
     }
   };
 
@@ -132,7 +167,10 @@ const SavePathModal = ({ initialValue, visible, onClose, onSave }: Props) => {
                 >
                   Set Language Path
                 </Dialog.Title>
-                <form className="space-y-4" onSubmit={handleSave}>
+                <form
+                  className="space-y-4"
+                  onSubmit={(e) => void handleSave(e)}
+                >
                   <div className="mt-2">
                     <input
                       type="text"
