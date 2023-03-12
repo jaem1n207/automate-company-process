@@ -54,18 +54,19 @@ const SavePathModal = ({ initialValue, visible, onClose, onSave }: Props) => {
     } catch (error) {
       console.error(error);
 
-      if (window !== undefined) {
-        const langPath = localStorage.getItem("langPath");
-        if (langPath) {
-          localStorage.removeItem("langPath");
-        }
-        router.reload();
-      }
-
       if (axios.isAxiosError(error)) {
         const { response } = error;
         if (response) {
           const { data } = response as AxiosResponse<ReadLangFIlesReturnType>;
+          if (window !== undefined) {
+            const langPath = localStorage.getItem("langPath");
+            if (langPath) {
+              localStorage.removeItem("langPath");
+            }
+            setTimeout(() => {
+              router.reload();
+            }, 1000);
+          }
           return toast.error(data.message);
         }
       }
