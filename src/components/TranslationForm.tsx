@@ -122,7 +122,11 @@ const TranslationForm = () => {
           />
         </div>
         <div className="mb-4">
-          <LoadingButton type="submit" isLoading={isLoading}>
+          <LoadingButton
+            type="submit"
+            isLoading={isLoading}
+            disabled={!fileKey || !text}
+          >
             번역 실행
           </LoadingButton>
         </div>
