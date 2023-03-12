@@ -1,24 +1,29 @@
 import { type Translations } from "@/models/language";
+import { isEmptryString } from "@/utils/assertions";
 import React, { type FormEvent, useEffect, useState, useCallback } from "react";
+import { type Id } from "react-toastify";
+import LoadingButton from "./common/LoadingButton";
 import EditableInput from "./EditableInput";
 
 interface TranslationResultsInputsProps {
   initialValues: Translations;
-  onSubmit: (value: Translations) => void;
+  onSubmit: (translations: Translations) => Promise<Id>;
+  isDisabled: boolean;
 }
 
 const TranslationResultsInputs = ({
   initialValues,
+  isDisabled,
   onSubmit,
 }: TranslationResultsInputsProps) => {
   const [translations, setTranslations] = useState<Translations>(initialValues);
 
   const handleSubmit = useCallback(
-    (e: FormEvent<HTMLFormElement>) => {
+    async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      onSubmit(translations);
+      await onSubmit(translations);
     },
-    [onSubmit, translations]
+    [translations, onSubmit]
   );
 
   useEffect(() => {
@@ -29,14 +34,13 @@ const TranslationResultsInputs = ({
     <div className="container mx-auto py-8">
       <div className="mx-auto max-w-lg">
         <h3 className="mb-4 text-2xl font-bold">번역 결과 확인</h3>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(e) => void handleSubmit(e)}>
           {Object.entries(translations).map(([label, value]) => (
             <div key={label} className="mt-1">
               <EditableInput
                 label={label}
                 value={value}
                 onChange={(value) => {
-                  console.log(label, value);
                   setTranslations((prevTranslations) => ({
                     ...prevTranslations,
                     [label]: value,
@@ -46,12 +50,19 @@ const TranslationResultsInputs = ({
             </div>
           ))}
           <div className="mt-4">
-            <button
+            <LoadingButton
               type="submit"
-              className="inline-flex justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              isLoading={false}
+              disabled={
+                isDisabled ||
+                Object.values(translations).some((value) =>
+                  isEmptryString(value)
+                ) ||
+                Object.keys(translations).length === 0
+              }
             >
               각 언어별 json 파일에 저장
-            </button>
+            </LoadingButton>
           </div>
         </form>
       </div>

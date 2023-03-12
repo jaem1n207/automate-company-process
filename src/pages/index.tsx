@@ -2,12 +2,10 @@ import { type NextPage } from "next";
 // import { signIn, signOut, useSession } from "next-auth/react";
 import { CheckIcon, CogIcon } from "@heroicons/react/24/solid";
 
-// import { api } from "@/utils/api";
 import TranslationForm from "@/components/TranslationForm";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useEffect, useState } from "react";
 import SavePathModal from "@/components/SavePathModal";
-import { toast } from "react-toastify";
 import { useSEO } from "@/hooks/useSEO";
 import { NextSeo } from "next-seo";
 import { useRedirectToTeamSelectionPage } from "@/hooks/useRedirectToTeamSelectionPage";
@@ -20,7 +18,6 @@ const Home: NextPage = () => {
   });
   useRedirectToTeamSelectionPage();
 
-  // const hello = api.example.hello.useQuery({ text: "from tRPC" });
   const [langPath, setLangPath] = useLocalStorage<string>(
     LOCAL_STORAGE_KEYS.LANG_PATH,
     ""
@@ -30,7 +27,6 @@ const Home: NextPage = () => {
   const handleModalSave = (value: string) => {
     setLangPath(value);
     setIsModalVisible(false);
-    toast.success("Language path set successfully!");
   };
 
   const handleModalClose = () => {

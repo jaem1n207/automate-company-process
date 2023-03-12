@@ -13,6 +13,13 @@ import { isEmptryString } from "@/utils/assertions";
 import { useCreateMixedValidator } from "@/hooks/validator/createMixedValidator";
 import { useKebabCaseValidator, useRequiredValidator } from "@/hooks/validator";
 import ErrorLabelList from "./common/ErrorLabelList";
+import axios, { type AxiosResponse } from "axios";
+import {
+  type KeyExistsInLangFilesParamsType,
+  type KeyExistsInLangFilesReturnType,
+  type UpdateLangFilesBodyType,
+  type UpdateLangFilesReturnType,
+} from "@/models/api";
 
 // const useRequiredKebabCaseValidator = () => {
 //   const { isError: isKebabCaseError, validateInput: validateKebabCase } =
@@ -53,17 +60,46 @@ const TranslationForm = () => {
     setFileKey(value);
   };
 
-  const handleTranslateClick = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleTranslateClick = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (fileKeyCombinedValidator.isError) return;
     if (textCombinedValidator.isError) return;
 
-    if (!langPath) {
-      return toast.info("`langPath`를 먼저 설정해주세요.");
-    }
+    try {
+      const params: KeyExistsInLangFilesParamsType = {
+        langPath,
+        key: fileKey,
+      };
 
-    translateText(text).catch((error) => console.error(error));
+      const { data } = await axios.get<KeyExistsInLangFilesReturnType>(
+        "/api/keyExistsInLangFiles",
+        {
+          params,
+        }
+      );
+
+      toast.success(data.message, {
+        autoClose: 1000,
+      });
+
+      await translateText(text);
+    } catch (error) {
+      console.error(error);
+
+      if (axios.isAxiosError(error)) {
+        const { response } = error;
+        if (response) {
+          const { data } =
+            response as AxiosResponse<KeyExistsInLangFilesReturnType>;
+          return toast.error(data.message, {
+            autoClose: 1000,
+          });
+        }
+      }
+
+      return toast.error("번역을 실행하는데 실패했어요. :(");
+    }
   };
 
   const translations: Translations = useMemo(
@@ -81,14 +117,42 @@ const TranslationForm = () => {
     [isLoading, translations]
   );
 
+  const handleSubmitTranslationResults = async (translations: Translations) => {
+    const body: UpdateLangFilesBodyType = {
+      langPath,
+      key: fileKey,
+      translations,
+    };
+
+    try {
+      const { data }: AxiosResponse<UpdateLangFilesReturnType> =
+        await axios.post("/api/updateLangFiles", body);
+      return toast.success(data.message);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const { response } = error;
+        if (response) {
+          const { data } = response as AxiosResponse<UpdateLangFilesReturnType>;
+          return toast.error(data.message);
+        }
+      }
+
+      return toast.error("번역 결과를 저장하는데 실패했어요. :(");
+    }
+  };
+
   return (
     <div>
-      <form onSubmit={handleTranslateClick} className="mx-auto max-w-lg">
+      <form
+        onSubmit={(e) => void handleTranslateClick(e)}
+        className="mx-auto max-w-lg"
+      >
         <div className="mb-4">
           <label htmlFor="key" className="mb-1 block font-medium text-gray-700">
             Key to Add
           </label>
           <input
+            autoComplete="off"
             type="text"
             id="key"
             name="key"
@@ -108,6 +172,7 @@ const TranslationForm = () => {
             Value to Add
           </label>
           <input
+            autoComplete="off"
             type="text"
             id="value"
             name="value"
@@ -136,8 +201,14 @@ const TranslationForm = () => {
 
       {isRenderResultsInputs && (
         <TranslationResultsInputs
-          onSubmit={(values) => console.log(values)}
+          onSubmit={handleSubmitTranslationResults}
           initialValues={translations}
+          isDisabled={
+            isEmptryString(fileKey) ||
+            isEmptryString(text) ||
+            textCombinedValidator.isError ||
+            fileKeyCombinedValidator.isError
+          }
         />
       )}
     </div>
