@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 
 import { type Translations } from "@/models/language";
 import { env } from "@/env.mjs";
+import { isEmptryString } from "@/utils/assertions";
 
 const API_ENDPOINT = "https://translation.googleapis.com/language/translate/v2";
 
@@ -67,9 +68,15 @@ export const useTranslate = (): UseTranslateResult => {
       ]);
       setTranslations({ ko, en, ja, vi });
     } catch (error) {
-      toast("번역에 실패했어요. 잠시 후 다시 시도해주세요.", {
-        type: "info",
-      });
+      if (isEmptryString(text)) {
+        toast("번역에 실패했어요. 번역할 값을 입력해주세요.", {
+          type: "error",
+        });
+      } else {
+        toast("번역에 실패했어요. 잠시 후 다시 시도해주세요.", {
+          type: "info",
+        });
+      }
       setTranslations({
         ko: undefined,
         en: undefined,

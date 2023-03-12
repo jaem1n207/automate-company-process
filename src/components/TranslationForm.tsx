@@ -9,8 +9,8 @@ import { toast } from "react-toastify";
 import { useKebabCaseValidator } from "@/hooks/validator";
 import { useRequiredValidator } from "@/hooks/validator/useRequiredValidator";
 import { useCreateMixedValidator } from "@/hooks/validator/createMixedValidator";
-import { regex } from "@/utils/regex";
 import { LOCAL_STORAGE_KEYS } from "@/enum";
+import LoadingButton from "./common/LoadingButton";
 
 // const useRequiredKebabCaseValidator = () => {
 //   const { isError: isKebabCaseError, validateInput: validateKebabCase } =
@@ -122,15 +122,9 @@ const TranslationForm = () => {
           />
         </div>
         <div className="mb-4">
-          {!isLoading && (
-            <button
-              disabled={isLoading}
-              type="submit"
-              className="w-full rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white"
-            >
-              번역 실행
-            </button>
-          )}
+          <LoadingButton type="submit" isLoading={isLoading}>
+            번역 실행
+          </LoadingButton>
         </div>
       </form>
 
