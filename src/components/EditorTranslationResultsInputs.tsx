@@ -1,6 +1,8 @@
-import { type Translations } from "@/models/language";
 import React, { useEffect, useState } from "react";
+
+import { type Translations } from "@/models/language";
 import EditableInput from "./EditableInput";
+import AnimatedContainer from "./AnimatedContainer";
 
 interface EditorTranslationResultsInputsProps {
   initialValues: Translations;
@@ -19,21 +21,23 @@ const EditorTranslationResultsInputs = ({
     <div className="container mx-auto py-8">
       <div className="mx-auto max-w-lg">
         <h3 className="mb-4 text-2xl font-bold">번역 결과 확인</h3>
-        {Object.entries(translations).map(([label, value]) => (
-          <div key={label} className="mt-1">
-            <EditableInput
-              isCopyable
-              label={label}
-              value={value}
-              onChange={(value) => {
-                setTranslations((prevTranslations) => ({
-                  ...prevTranslations,
-                  [label]: value,
-                }));
-              }}
-            />
-          </div>
-        ))}
+        <AnimatedContainer>
+          {Object.entries(translations).map(([label, value]) => (
+            <div key={label} className="mt-1">
+              <EditableInput
+                isCopyable
+                label={label}
+                value={value}
+                onChange={(value) => {
+                  setTranslations((prevTranslations) => ({
+                    ...prevTranslations,
+                    [label]: value,
+                  }));
+                }}
+              />
+            </div>
+          ))}
+        </AnimatedContainer>
       </div>
     </div>
   );
