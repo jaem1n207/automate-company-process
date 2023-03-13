@@ -37,11 +37,8 @@ export default function handler(
       return res.status(500).json({ message: errorMessage });
     }
 
-    const filePath2 = path.join(process.cwd(), langPath);
-
     try {
-      // const files = fs.readdirSync(langPath);
-      const files = fs.readdirSync(filePath2);
+      const files = fs.readdirSync(langPath);
       /**
        * 주어진 경로에서 존재하는 모든 언어 파일을 가져옵니다.
        */
@@ -58,12 +55,10 @@ export default function handler(
           });
       }
 
-      // const langFiles = readLangFiles(langPath);
-      const langFiles = readLangFiles(filePath2);
+      const langFiles = readLangFiles(langPath);
 
       if (langFiles.length === 0) {
-        // errorMessage = `잘못된 경로: '${langPath}'경로에 *.lang.json 파일이 존재하지 않아요.`;
-        errorMessage = `cwd: ${process.cwd()}, filePath2: ${filePath2}`;
+        errorMessage = `잘못된 경로: '${langPath}'경로에 *.lang.json 파일이 존재하지 않아요.`;
       } else {
         message = `성공적으로 '${langPath}' 경로에서 ${files.length}개의 언어 파일을 가져왔어요.}`;
       }
@@ -75,8 +70,7 @@ export default function handler(
       return res.status(200).json({ message });
     } catch (error) {
       return res.status(500).json({
-        // message: `잘못된 경로: '${langPath}'경로에 *.lang.json 파일이 존재하지 않아요.`,
-        message: `cwd: ${process.cwd()}, filePath2: ${filePath2}`,
+        message: `잘못된 경로: '${langPath}'경로에 *.lang.json 파일이 존재하지 않아요.`,
       });
     }
   } else {
