@@ -63,11 +63,13 @@ const SavePathModal = ({ initialValue, visible, onClose, onSave }: Props) => {
             if (langPath) {
               localStorage.removeItem("langPath");
             }
-            setTimeout(() => {
-              router.reload();
-            }, 1000);
+            // setTimeout(() => {
+            //   router.reload();
+            // }, 1000);
           }
-          return toast.error(data.message);
+          return toast.error(data.message, {
+            autoClose: 20_000,
+          });
         }
       }
 
