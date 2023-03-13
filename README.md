@@ -19,5 +19,4 @@
 3. 번역을 원하는 텍스트를 입력합니다. (특수문자로만 이루어져선 안 됩니다.)
 4. 번역한 결과(kr, en, ja, vi)가 각 *.lang.json의 마지막 라인에 자동으로 추가됩니다. + 스타일 포맷팅
 
-일 자동화
 ![web-translate-test](https://user-images.githubusercontent.com/50766847/224696672-7cf5aa8b-4e53-4ae0-8770-9924bead50b6.gif)
