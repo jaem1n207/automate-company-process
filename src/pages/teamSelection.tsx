@@ -147,7 +147,7 @@ const TeamSelection = () => {
               key={option.value}
               option={option}
               selected={selectedTeam}
-              disabled={true}
+              disabled={option.value === "dashboard"}
               onClick={() => handleClick(option.value)}
             />
           ))}
