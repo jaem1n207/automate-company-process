@@ -62,6 +62,10 @@ const EditableInput = memo(
       [handleSaveClick, handleCancelClick]
     );
 
+    const hasCopyButtonEditablePositionStyles: string = isCopyable
+      ? "right-12"
+      : "right-0";
+
     return (
       <div className="relative mb-4">
         <label htmlFor={label} className="mb-1 block font-medium text-gray-700">
@@ -84,9 +88,13 @@ const EditableInput = memo(
             disabled={!isEditing}
           />
           {!isEditing && (
-            <div className="absolute top-0 left-0 right-12 h-full w-full cursor-not-allowed rounded-lg bg-gray-100 opacity-50"></div>
+            <div
+              className={`absolute top-0 left-0 ${hasCopyButtonEditablePositionStyles} h-full w-full cursor-not-allowed rounded-lg bg-gray-100 opacity-50`}
+            ></div>
           )}
-          <div className="absolute inset-y-0 right-12 flex items-center">
+          <div
+            className={`absolute inset-y-0 ${hasCopyButtonEditablePositionStyles} flex items-center`}
+          >
             {isEditing ? (
               <Transition
                 show={isEditing}

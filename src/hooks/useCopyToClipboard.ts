@@ -16,7 +16,9 @@ export const useCopyToClipboard = (): [CopiedValue, CopyFn] => {
     try {
       await navigator.clipboard.writeText(text);
       setCopiedText(text);
-      toast.success("Copied to clipboard");
+      toast.success("Copied to clipboard", {
+        autoClose: 1000,
+      });
       return true;
     } catch (error) {
       console.warn("Copy failed", error);

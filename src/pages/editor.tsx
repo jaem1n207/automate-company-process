@@ -1,22 +1,21 @@
-import Head from "next/head";
 import React from "react";
 
 import { useRedirectToTeamSelectionPage } from "@/hooks/useRedirectToTeamSelectionPage";
+import { useSEO } from "@/hooks/useSEO";
+import { NextSeo } from "next-seo";
+import EditorTranslationForm from "@/components/EditorTranslationForm";
 
 const Editor = () => {
+  const SEO = useSEO({
+    title: "Editor",
+    description: "Automate Archisketch Process for Editor Team",
+  });
   useRedirectToTeamSelectionPage();
 
   return (
     <>
-      <Head>
-        <title>Editor</title>
-        <meta
-          name="description"
-          content="Automate Archisketch Process for Editor Team"
-        />
-        <link rel="icon" href="/favicon-512.png" />
-      </Head>
-      Editor
+      <NextSeo {...SEO} />
+      <EditorTranslationForm />
     </>
   );
 };
