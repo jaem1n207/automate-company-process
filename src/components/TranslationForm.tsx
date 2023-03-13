@@ -79,9 +79,7 @@ const TranslationForm = () => {
         }
       );
 
-      toast.success(data.message, {
-        autoClose: 1000,
-      });
+      toast.success(data.message);
 
       await translateText(text);
     } catch (error) {
@@ -92,9 +90,7 @@ const TranslationForm = () => {
         if (response) {
           const { data } =
             response as AxiosResponse<KeyExistsInLangFilesReturnType>;
-          return toast.error(data.message, {
-            autoClose: 1000,
-          });
+          return toast.error(data.message);
         }
       }
 
@@ -201,6 +197,7 @@ const TranslationForm = () => {
 
       {isRenderResultsInputs && (
         <TranslationResultsInputs
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises
           onSubmit={handleSubmitTranslationResults}
           initialValues={translations}
           isDisabled={
