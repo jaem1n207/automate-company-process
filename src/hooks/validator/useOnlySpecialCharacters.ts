@@ -6,7 +6,7 @@ export const useOnlySpecialCharactersValidator = (errorMessage?: string) => {
 
   const validateInput = useCallback((value: string) => {
     const isValid = regex.onlySpecialCharacters.test(value.trim());
-    setIsError(!isValid);
+    setIsError(isValid);
     return isValid;
   }, []);
 
