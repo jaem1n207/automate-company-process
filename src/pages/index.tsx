@@ -5,7 +5,7 @@ import { CheckIcon, CogIcon } from "@heroicons/react/24/solid";
 import TranslationForm from "@/components/TranslationForm";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useEffect, useState } from "react";
-import SavePathModal from "@/components/SavePathModal";
+// import SavePathModal from "@/components/SavePathModal";
 import { useSEO } from "@/hooks/useSEO";
 import { NextSeo } from "next-seo";
 import { useRedirectToTeamSelectionPage } from "@/hooks/useRedirectToTeamSelectionPage";
@@ -22,25 +22,25 @@ const Home: NextPage = () => {
     LOCAL_STORAGE_KEYS.LANG_PATH,
     ""
   );
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  // const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const handleModalSave = (value: string) => {
-    setLangPath(value);
-    setIsModalVisible(false);
-  };
+  // const handleModalSave = (value: string) => {
+  //   setLangPath(value);
+  //   setIsModalVisible(false);
+  // };
 
-  const handleModalClose = () => {
-    setIsModalVisible(false);
-  };
+  // const handleModalClose = () => {
+  //   setIsModalVisible(false);
+  // };
 
-  useEffect(() => {
-    setIsModalVisible(!langPath);
-  }, [langPath]);
+  // useEffect(() => {
+  //   setIsModalVisible(!langPath);
+  // }, [langPath]);
 
   return (
     <>
       <NextSeo {...SEO} />
-      <button
+      {/* <button
         className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
         onClick={() => setIsModalVisible(true)}
       >
@@ -52,7 +52,7 @@ const Home: NextPage = () => {
         visible={isModalVisible}
         onClose={handleModalClose}
         onSave={handleModalSave}
-      />
+      /> */}
       {langPath && (
         <div className="my-4 flex items-center rounded-md bg-green-100 p-2 text-green-800">
           <CheckIcon className="mr-2 h-5 w-5" aria-hidden="true" />

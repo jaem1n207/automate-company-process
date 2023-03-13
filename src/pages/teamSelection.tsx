@@ -6,6 +6,7 @@ import { LOCAL_STORAGE_KEYS, ROUTES } from "@/enum";
 import { type Team } from "@/models/team";
 import { useSEO } from "@/hooks/useSEO";
 import { NextSeo } from "next-seo";
+import { toast } from "react-toastify";
 
 interface TeamOption {
   label: string;
@@ -33,9 +34,15 @@ interface OptionCardProps {
   option: TeamOption;
   selected?: Team;
   onClick: () => void;
+  disabled?: boolean;
 }
 
-const OptionCard = ({ option, selected, onClick }: OptionCardProps) => {
+const OptionCard = ({
+  option,
+  selected,
+  onClick,
+  disabled,
+}: OptionCardProps) => {
   const cardVariants: Variants = {
     hidden: {
       opacity: 0,
@@ -50,12 +57,15 @@ const OptionCard = ({ option, selected, onClick }: OptionCardProps) => {
     },
   };
 
+  const selectedStyles =
+    !disabled && selected === option.value ? "border-blue-500" : "";
+  const disabledStyles = disabled ? "opacity-50 cursor-not-allowed" : "";
+
   return (
     <motion.div variants={cardVariants}>
       <div
-        className={`select-none hover:border-blue-500 hover:shadow-lg ${
-          selected === option.value ? "border-blue-500" : "border-gray-300"
-        } h-full cursor-pointer rounded-lg border p-24 transition-all duration-300 ease-in-out`}
+        aria-disabled={disabled}
+        className={`select-none hover:border-blue-500 hover:shadow-lg ${selectedStyles} h-full cursor-pointer rounded-lg border p-24 transition-all duration-300 ease-in-out ${disabledStyles}`}
         onClick={onClick}
       >
         <div className="mb-8 flex items-center justify-center">
@@ -64,6 +74,12 @@ const OptionCard = ({ option, selected, onClick }: OptionCardProps) => {
         <div className="text-center text-lg font-medium md:text-3xl">
           {option.label}
         </div>
+        {option.value === "dashboard" && (
+          <div className="mt-4 text-center text-sm">
+            * 대시보드팀은 보안상 지원하지 않아요. 대시보드 프로젝트의 npm run
+            translate 명령어를 사용해주세요.
+          </div>
+        )}
       </div>
     </motion.div>
   );
@@ -78,6 +94,16 @@ const TeamSelection = () => {
   const [selectedTeam, setSelectedTeam] = useState<Team | undefined>();
   const router = useRouter();
 
+  const handleClick = (value: Team) => {
+    if (value === "dashboard") {
+      toast.info(
+        "대시보드팀은 보안상 지원하지 않아요. 대시보드 프로젝트의 npm run translate 명령어를 사용해주세요."
+      );
+      return;
+    }
+    setSelectedTeam(value);
+  };
+
   const handleCancel = () => {
     setSelectedTeam(undefined);
   };
@@ -87,7 +113,7 @@ const TeamSelection = () => {
 
     localStorage.setItem(LOCAL_STORAGE_KEYS.MY_TEAM, selectedTeam);
     if (selectedTeam === "dashboard") {
-      void router.push(ROUTES.DASHBOARD);
+      // void router.push(ROUTES.DASHBOARD);
     } else if (selectedTeam === "editor") {
       void router.push(ROUTES.EDITOR);
     }
@@ -121,7 +147,8 @@ const TeamSelection = () => {
               key={option.value}
               option={option}
               selected={selectedTeam}
-              onClick={() => setSelectedTeam(option.value)}
+              disabled={true}
+              onClick={() => handleClick(option.value)}
             />
           ))}
         </motion.div>
