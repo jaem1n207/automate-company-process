@@ -20,9 +20,9 @@
 4. 번역한 결과(kr, en, ja, vi)가 각 *.lang.json의 마지막 라인에 자동으로 추가됩니다. + 스타일 포맷팅
 
 
-- Web
+### Web
 ![web-translate-test](https://user-images.githubusercontent.com/50766847/224696672-7cf5aa8b-4e53-4ae0-8770-9924bead50b6.gif)
 
-- Script
+### Script
 ![script-translate-test](https://user-images.githubusercontent.com/50766847/224702638-65d07c24-4991-4797-a6c7-78b3e5c8e1d3.gif)
 
