@@ -25,9 +25,6 @@ export default function handler(
     let errorMessage = "";
     let message = "";
 
-    // ../../archisketch/enterprise_dashboard/libs/locales/languages
-    const langPath2 = path.join(process.cwd(), langPath);
-
     const requiredFields = ["langPath"];
     for (const field of requiredFields) {
       if (!req.query[field]) {
@@ -41,7 +38,7 @@ export default function handler(
     }
 
     try {
-      const files = fs.readdirSync(langPath2);
+      const files = fs.readdirSync(langPath);
       /**
        * 주어진 경로에서 존재하는 모든 언어 파일을 가져옵니다.
        */
@@ -52,14 +49,13 @@ export default function handler(
             const lang = file.replace(".lang.json", "");
 
             const data = JSON.parse(
-              // fs.readFileSync(path.join(langPath, file), "utf-8")
               fs.readFileSync(path.join(langPath, file), "utf-8")
             ) as LangData;
             return { lang, data };
           });
       }
 
-      const langFiles = readLangFiles(langPath2);
+      const langFiles = readLangFiles(langPath);
 
       if (langFiles.length === 0) {
         errorMessage = `잘못된 경로: '${langPath}'경로에 *.lang.json 파일이 존재하지 않아요.`;
