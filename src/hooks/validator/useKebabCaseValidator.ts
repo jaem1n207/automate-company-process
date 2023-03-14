@@ -1,7 +1,10 @@
+import { type Message, type SingleValidator } from "@/models/validator";
 import { regex } from "@/utils/regex";
 import { useCallback, useState } from "react";
 
-export const useKebabCaseValidator = (errorMessage?: string) => {
+export const useKebabCaseValidator: SingleValidator<string> = (
+  message?: Message
+) => {
   const [isError, setIsError] = useState<boolean>(false);
 
   const validateInput = useCallback((value: string) => {
@@ -11,8 +14,7 @@ export const useKebabCaseValidator = (errorMessage?: string) => {
   }, []);
 
   return {
-    name: "kebabCase",
-    errorMessage: errorMessage ?? "kebab-case 형식으로 작성해주세요.",
+    errorMessage: message ?? "kebab-case로 입력해주세요.",
     isError,
     validateInput,
   };

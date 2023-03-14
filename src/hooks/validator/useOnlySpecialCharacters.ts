@@ -1,7 +1,10 @@
+import { type Validator } from "@/models/validator";
 import { regex } from "@/utils/regex";
 import { useCallback, useState } from "react";
 
-export const useOnlySpecialCharactersValidator = (errorMessage?: string) => {
+export const useOnlySpecialCharactersValidator = (
+  errorMessage?: string
+): Validator => {
   const [isError, setIsError] = useState<boolean>(false);
 
   const validateInput = useCallback((value: string) => {
@@ -11,7 +14,6 @@ export const useOnlySpecialCharactersValidator = (errorMessage?: string) => {
   }, []);
 
   return {
-    name: "onlySpecialCharacters",
     errorMessage: errorMessage ?? "특수문자만으로 이루어질 수 없어요.",
     isError,
     validateInput,

@@ -9,6 +9,7 @@ import LoadingButton from "./common/LoadingButton";
 import { isEmptryString } from "@/utils/assertions";
 import { useCreateMixedValidator } from "@/hooks/validator/createMixedValidator";
 import {
+  useKebabCaseValidator,
   useOnlySpecialCharactersValidator,
   useRequiredValidator,
 } from "@/hooks/validator";
@@ -18,8 +19,9 @@ import EditorTranslationResultsInputs from "./EditorTranslationResultsInputs";
 const EditorTranslationForm = () => {
   const [text, setText] = useState("");
   const textCombinedValidator = useCreateMixedValidator(
-    useRequiredValidator(),
-    useOnlySpecialCharactersValidator()
+    useKebabCaseValidator(),
+    useOnlySpecialCharactersValidator(),
+    useRequiredValidator()
   );
   const { ko, en, ja, vi, isLoading, translateText } = useTranslate();
 
@@ -61,6 +63,8 @@ const EditorTranslationForm = () => {
   const handleSubmitTranslationResults = (translations: Translations) => {
     console.log(translations);
   };
+
+  // console.log(textCombinedValidator);
 
   return (
     <div>
