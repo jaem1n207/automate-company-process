@@ -40,9 +40,9 @@ import {
 const TranslationForm = () => {
   const [fileKey, setFileKey] = useState("");
   const [text, setText] = useState("");
-  const fileKeyCombinedValidator = useCreateMixedValidator(
-    useRequiredValidator(),
-    useKebabCaseValidator()
+  const fileKeyCombinedValidator = useCreateMixedValidator<string>(
+    useKebabCaseValidator(),
+    useRequiredValidator()
   );
   const textCombinedValidator = useCreateMixedValidator(useRequiredValidator());
   const { ko, en, ja, vi, isLoading, translateText } = useTranslate();

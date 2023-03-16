@@ -1,35 +1,33 @@
-import { type Validator } from "@/models/validator";
+import { type ValidateReturn, type ValidationValue } from "@/models/validator";
 import { useMemo, useState } from "react";
 
-export const useCreateMixedValidator = <T>(
-  ...validators: Array<{
-    validateInput: (value: T) => boolean;
-    isError: boolean;
-    errorMessage: string;
-    name: string;
-  }>
+export const useCreateMixedValidator = <T extends ValidationValue>(
+  ...validators: ValidateReturn<T>[]
 ) => {
   const [isError, setIsError] = useState<boolean>(false);
 
+  /**
+   * 전달 받은 validators를 순회하며 하나라도 error가 발생하면 isError를 true로 변경합니다.
+   */
   const validateInput = (value: T) => {
-    let isValid = true;
-
     validators.forEach((validator) => {
-      const { validateInput, isError } = validator;
-      isValid = isValid && validateInput(value);
-      setIsError(isError);
+      validator.validateInput(value);
     });
 
-    return isValid;
+    const isValid = validators.reduce(
+      (acc, validator) => acc && !validator.isError,
+      true
+    );
+    setIsError(!isValid);
+
+    return true;
   };
 
-  const validatorList: Validator[] = useMemo(
-    () =>
-      validators.map(({ name, errorMessage, isError }) => ({
-        name,
-        errorMessage,
-        isError,
-      })),
+  /**
+   * validators를 순회하며 isError가 true인 validator를 찾아서 반환합니다.
+   */
+  const validatorList = useMemo(
+    () => validators.filter((validator) => validator.isError),
     [validators]
   );
 

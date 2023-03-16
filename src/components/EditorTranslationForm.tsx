@@ -17,9 +17,9 @@ import EditorTranslationResultsInputs from "./EditorTranslationResultsInputs";
 
 const EditorTranslationForm = () => {
   const [text, setText] = useState("");
-  const textCombinedValidator = useCreateMixedValidator(
-    useRequiredValidator(),
-    useOnlySpecialCharactersValidator()
+  const textCombinedValidator = useCreateMixedValidator<string>(
+    useOnlySpecialCharactersValidator(),
+    useRequiredValidator()
   );
   const { ko, en, ja, vi, isLoading, translateText } = useTranslate();
 
@@ -61,6 +61,8 @@ const EditorTranslationForm = () => {
   const handleSubmitTranslationResults = (translations: Translations) => {
     console.log(translations);
   };
+
+  // console.log(textCombinedValidator);
 
   return (
     <div>
