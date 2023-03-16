@@ -1,6 +1,6 @@
 type Message = string;
 
-export type ValidationValue = boolean | string | RegExp;
+export type ValidationValue = boolean | number | string | RegExp;
 
 export type ValidateReturn<
   TValidationValue extends ValidationValue = ValidationValue
