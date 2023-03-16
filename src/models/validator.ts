@@ -1,8 +1,8 @@
-export type Message = string;
+type Message = string;
 
-type ValidationValue = boolean | number | string | RegExp;
+export type ValidationValue = boolean | string | RegExp;
 
-export type ValidateResult<
+export type ValidateReturn<
   TValidationValue extends ValidationValue = ValidationValue
 > = {
   isError: boolean;
@@ -12,14 +12,4 @@ export type ValidateResult<
 
 export type SingleValidator<
   ValidationRule extends ValidationValue = ValidationValue
-> = (message?: Message) => ValidateResult<ValidationRule>;
-
-export type MultipleValidateReulst = {
-  isError: boolean;
-  validators: SingleValidator[];
-  validateInput: (value: ValidationValue) => boolean;
-};
-
-export type MultipleValidator = (
-  ...validators: ValidateResult<any>[]
-) => MultipleValidateReulst;
+> = (message?: Message) => ValidateReturn<ValidationRule>;
