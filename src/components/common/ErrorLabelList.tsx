@@ -1,19 +1,14 @@
 import React from "react";
 import { AnimatePresence, motion, type Variants } from "framer-motion";
-import { type Validator } from "@/models/validator";
+import { type ValidationValue, type ValidateReturn } from "@/models/validator";
 
-type ListProps<T> = {
-  validator:
-    | Validator<T>
-    | {
-        isError: boolean;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        validateInput: (value: T) => void;
-        validators: Validator<T>[];
-      };
+type ListProps<T extends ValidationValue> = {
+  validators: ValidateReturn<T>[];
 };
 
-const ErrorLabelList = <T,>({ validator }: ListProps<T>) => {
+const ErrorLabelList = <T extends ValidationValue>({
+  validators,
+}: ListProps<T>) => {
   const errorListVariants: Variants = {
     hidden: { opacity: 0, y: 10 },
     visible: { opacity: 1, y: 0 },

@@ -9,7 +9,6 @@ import LoadingButton from "./common/LoadingButton";
 import { isEmptryString } from "@/utils/assertions";
 import { useCreateMixedValidator } from "@/hooks/validator/createMixedValidator";
 import {
-  useKebabCaseValidator,
   useOnlySpecialCharactersValidator,
   useRequiredValidator,
 } from "@/hooks/validator";
@@ -18,8 +17,7 @@ import EditorTranslationResultsInputs from "./EditorTranslationResultsInputs";
 
 const EditorTranslationForm = () => {
   const [text, setText] = useState("");
-  const textCombinedValidator = useCreateMixedValidator(
-    useKebabCaseValidator(),
+  const textCombinedValidator = useCreateMixedValidator<string>(
     useOnlySpecialCharactersValidator(),
     useRequiredValidator()
   );
