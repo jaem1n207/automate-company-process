@@ -1,9 +1,7 @@
-import { type Validator } from "@/models/validator";
+import { type SingleValidator } from "@/models/validator";
 import { useCallback, useState } from "react";
 
-export const useRequiredValidator = (
-  errorMessage?: string
-): Validator<string> => {
+export const useRequiredValidator: SingleValidator<string> = (message) => {
   const [isError, setIsError] = useState<boolean>(false);
 
   const validateInput = useCallback((value: string) => {
@@ -13,7 +11,7 @@ export const useRequiredValidator = (
   }, []);
 
   return {
-    errorMessage: errorMessage ?? "필수값이 비어있습니다.",
+    errorMessage: message ?? "필수값이 비어있습니다.",
     isError,
     validateInput,
   };

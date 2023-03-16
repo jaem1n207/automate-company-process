@@ -1,18 +1,15 @@
-import {
-  type ValidateResult,
-  type MultipleValidator,
-} from "@/models/validator";
+import { type ValidateReturn, type ValidationValue } from "@/models/validator";
 import { useMemo, useState } from "react";
 
-export const useCreateMixedValidator: MultipleValidator = (
-  ...validators: Array<ValidateResult<any>>
+export const useCreateMixedValidator = <T extends ValidationValue>(
+  ...validators: ValidateReturn<T>[]
 ) => {
   const [isError, setIsError] = useState<boolean>(false);
 
   /**
    * 전달 받은 validators를 순회하며 하나라도 error가 발생하면 isError를 true로 변경합니다.
    */
-  const validateInput = (value: string) => {
+  const validateInput = (value: T) => {
     validators.forEach((validator) => {
       validator.validateInput(value);
     });

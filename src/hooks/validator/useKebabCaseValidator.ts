@@ -1,10 +1,8 @@
-import { type Message, type SingleValidator } from "@/models/validator";
+import { type SingleValidator } from "@/models/validator";
 import { regex } from "@/utils/regex";
 import { useCallback, useState } from "react";
 
-export const useKebabCaseValidator: SingleValidator<string> = (
-  message?: Message
-) => {
+export const useKebabCaseValidator: SingleValidator<string> = (message) => {
   const [isError, setIsError] = useState<boolean>(false);
 
   const validateInput = useCallback((value: string) => {
