@@ -16,7 +16,7 @@ export const useCopyToClipboard = (): [CopiedValue, CopyFn] => {
     try {
       await navigator.clipboard.writeText(text);
       setCopiedText(text);
-      toast.success("Copied to clipboard", {
+      toast.success(`'${text}'가 복사되었어요.`, {
         autoClose: 1000,
       });
       return true;

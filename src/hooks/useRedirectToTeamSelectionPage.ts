@@ -8,9 +8,9 @@ export const useRedirectToTeamSelectionPage = () => {
   useEffect(() => {
     const myTeam = window.localStorage.getItem(LOCAL_STORAGE_KEYS.MY_TEAM);
 
-    if (myTeam === "dashboard") {
+    if (myTeam === "teamB") {
       void router.push(ROUTES.DASHBOARD);
-    } else if (myTeam === "editor") {
+    } else if (myTeam === "teamA") {
       void router.push(ROUTES.EDITOR);
     } else {
       void router.push(ROUTES.TEAM_SELECTION);

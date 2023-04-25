@@ -43,6 +43,10 @@ export default function handler(
        */
       function readLangFiles(langPath: string): LangFile[] {
         const files = fs.readdirSync(langPath);
+        console.log(
+          "🚀 ~ file: updateLangFiles.ts:46 ~ readLangFiles ~ files:",
+          files
+        );
 
         return files
           .filter((file) => file.endsWith(".lang.json"))

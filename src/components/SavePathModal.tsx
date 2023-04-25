@@ -68,7 +68,7 @@ const SavePathModal = ({ initialValue, visible, onClose, onSave }: Props) => {
             // }, 1000);
           }
           return toast.error(data.message, {
-            autoClose: 20_000,
+            autoClose: 5_000,
           });
         }
       }

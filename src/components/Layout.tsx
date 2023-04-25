@@ -8,8 +8,8 @@ import Link from "next/link";
 import { LOCAL_STORAGE_KEYS, ROUTES } from "@/enum";
 
 // const navigation = [
-//   { name: "Dashboard", href: "/", current: false },
-//   { name: "Editor", href: "/editor", current: false },
+//   { name: "TeamB", href: "/", current: false },
+//   { name: "teamA", href: "/teamA", current: false },
 // ];
 
 interface LayoutProps {
@@ -146,9 +146,9 @@ const Layout: React.FC<LayoutProps> = ({ children, path: pathProp }) => {
           <h1 className="text-4xl font-bold text-gray-900">
             조직:{" "}
             {router.pathname === "/"
-              ? "Dashboard"
-              : router.pathname === "/editor"
-              ? "Editor"
+              ? "TeamB"
+              : router.pathname === "/teamA"
+              ? "teamA"
               : "Unknown"}
           </h1>
         </div>

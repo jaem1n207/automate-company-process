@@ -17,14 +17,14 @@ interface TeamOption {
 
 const teamOptions: TeamOption[] = [
   {
-    label: "Dashboard",
-    value: "dashboard",
+    label: "TeamB",
+    value: "teamB",
     icon: <DashboardIcon className="h-2/6 w-2/4" />,
     modalIcon: <DashboardIcon />,
   },
   {
-    label: "Editor",
-    value: "editor",
+    label: "teamA",
+    value: "teamA",
     icon: <EditorIcon className="h-2/6 w-2/4" />,
     modalIcon: <EditorIcon />,
   },
@@ -62,7 +62,7 @@ const OptionCard = ({
   const disabledStyles = disabled ? "opacity-50 cursor-not-allowed" : "";
 
   return (
-    <motion.div variants={cardVariants}>
+    <motion.div variants={cardVariants} className="w-[40vw]">
       <div
         aria-disabled={disabled}
         className={`select-none hover:border-blue-500 hover:shadow-lg ${selectedStyles} h-full cursor-pointer rounded-lg border p-24 transition-all duration-300 ease-in-out ${disabledStyles}`}
@@ -74,12 +74,6 @@ const OptionCard = ({
         <div className="text-center text-lg font-medium md:text-3xl">
           {option.label}
         </div>
-        {option.value === "dashboard" && (
-          <div className="mt-4 text-center text-sm">
-            * 대시보드팀은 보안상 지원하지 않아요. 대시보드 프로젝트의 npm run
-            translate 명령어를 사용해주세요.
-          </div>
-        )}
       </div>
     </motion.div>
   );
@@ -95,12 +89,6 @@ const TeamSelection = () => {
   const router = useRouter();
 
   const handleClick = (value: Team) => {
-    if (value === "dashboard") {
-      toast.info(
-        "대시보드팀은 보안상 지원하지 않아요. 대시보드 프로젝트의 npm run translate 명령어를 사용해주세요."
-      );
-      return;
-    }
     setSelectedTeam(value);
   };
 
@@ -112,9 +100,9 @@ const TeamSelection = () => {
     if (!selectedTeam) return;
 
     localStorage.setItem(LOCAL_STORAGE_KEYS.MY_TEAM, selectedTeam);
-    if (selectedTeam === "dashboard") {
-      // void router.push(ROUTES.DASHBOARD);
-    } else if (selectedTeam === "editor") {
+    if (selectedTeam === "teamB") {
+      void router.push(ROUTES.DASHBOARD);
+    } else if (selectedTeam === "teamA") {
       void router.push(ROUTES.EDITOR);
     }
   };
@@ -147,7 +135,6 @@ const TeamSelection = () => {
               key={option.value}
               option={option}
               selected={selectedTeam}
-              disabled={option.value === "dashboard"}
               onClick={() => handleClick(option.value)}
             />
           ))}
@@ -203,7 +190,7 @@ const TeamSelectionModal = ({
       >
         <div className="w-full rounded-lg bg-white p-8 shadow-lg md:w-1/4">
           <h2 className="mb-4 text-center text-lg font-bold md:text-3xl">
-            &lsquo;{selectedTeam === "dashboard" ? "대시보드" : "에디터"}
+            &lsquo;{selectedTeam === "teamB" ? "teamB" : "teamA"}
             &rsquo;팀을 선택하셨어요
           </h2>
           <div className="mb-8 flex items-center justify-center">
@@ -220,7 +207,7 @@ const TeamSelectionModal = ({
               className="rounded-lg bg-blue-500 px-4 py-2 text-white"
               onClick={onOK}
             >
-              네 {selectedTeam === "dashboard" ? "대시보드" : "에디터"}팀이에요
+              네 {selectedTeam === "teamB" ? "teamB" : "teamA"}팀이에요
             </button>
           </div>
         </div>

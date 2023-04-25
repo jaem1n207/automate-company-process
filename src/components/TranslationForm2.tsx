@@ -98,7 +98,7 @@ const TranslationForm = () => {
     <form onSubmit={handleSubmit} className="mx-auto max-w-md">
       <div className="mb-4">
         <label htmlFor="key" className="mb-1 block font-medium text-gray-700">
-          Key to Add
+          추가할 key 입력
         </label>
         <input
           type="text"
@@ -113,7 +113,7 @@ const TranslationForm = () => {
 
       <div className="mb-4">
         <label htmlFor="value" className="mb-1 block font-medium text-gray-700">
-          Value to Add
+          번역할 문구 입력
         </label>
         <input
           type="text"

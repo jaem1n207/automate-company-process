@@ -1,6 +1,6 @@
 export const ROUTES = {
   DASHBOARD: "/",
-  EDITOR: "/editor",
+  EDITOR: "/teamA",
   TEAM_SELECTION: "/teamSelection",
 };
 

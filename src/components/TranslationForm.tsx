@@ -11,7 +11,11 @@ import { LOCAL_STORAGE_KEYS } from "@/enum";
 import LoadingButton from "./common/LoadingButton";
 import { isEmptryString } from "@/utils/assertions";
 import { useCreateMixedValidator } from "@/hooks/validator/createMixedValidator";
-import { useKebabCaseValidator, useRequiredValidator } from "@/hooks/validator";
+import {
+  useCamelCaseValidator,
+  useKebabCaseValidator,
+  useRequiredValidator,
+} from "@/hooks/validator";
 import ErrorLabelList from "./common/ErrorLabelList";
 import axios, { type AxiosResponse } from "axios";
 import {
@@ -41,7 +45,7 @@ const TranslationForm = () => {
   const [fileKey, setFileKey] = useState("");
   const [text, setText] = useState("");
   const fileKeyCombinedValidator = useCreateMixedValidator<string>(
-    useKebabCaseValidator(),
+    useCamelCaseValidator(),
     useRequiredValidator()
   );
   const textCombinedValidator = useCreateMixedValidator(useRequiredValidator());
@@ -145,7 +149,7 @@ const TranslationForm = () => {
       >
         <div className="mb-4">
           <label htmlFor="key" className="mb-1 block font-medium text-gray-700">
-            Key to Add
+            추가할 key 입력
           </label>
           <input
             autoComplete="off"
@@ -165,7 +169,7 @@ const TranslationForm = () => {
             htmlFor="value"
             className="mb-1 block font-medium text-gray-700"
           >
-            Value to Add
+            번역할 문구 입력
           </label>
           <input
             autoComplete="off"

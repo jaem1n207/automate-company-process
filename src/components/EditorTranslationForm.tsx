@@ -75,7 +75,7 @@ const EditorTranslationForm = () => {
             htmlFor="value"
             className="mb-1 block font-medium text-gray-700"
           >
-            Value to Add
+            번역할 문구 입력
           </label>
           <input
             autoComplete="off"

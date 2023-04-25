@@ -9,7 +9,7 @@ const DashboardIcon = (props: SVGProps<SVGSVGElement>) => {
     // @ts-ignore
     <Image
       src="/dashboard-icon.svg"
-      alt="Dashboard Icon"
+      alt="TeamB Icon"
       {...props}
       width={IconSize.xlarge}
       height={IconSize.xlarge}
